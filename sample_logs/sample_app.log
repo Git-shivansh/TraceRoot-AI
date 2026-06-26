@@ -1,0 +1,63 @@
+2026-06-25 09:00:01,102 INFO [order-service] OrderProcessor - Service started, version v2.14.0
+2026-06-25 09:00:02,330 INFO [inventory-service] InventoryWorker - Service started, version v1.9.3
+2026-06-25 09:00:03,118 INFO [payment-service] PaymentGateway - Service started, version v3.2.1
+2026-06-25 09:05:11,400 INFO [order-service] OrderProcessor - Processed order 8801 in 142ms
+2026-06-25 09:08:45,221 INFO [order-service] OrderProcessor - Processed order 8812 in 158ms
+2026-06-25 09:12:03,221 WARN [order-service] DBConnectionPool - Connection pool usage at 82/100
+2026-06-25 09:14:10,002 WARN [order-service] DBConnectionPool - Connection pool usage at 91/100
+2026-06-25 09:15:22,640 WARN [order-service] DBConnectionPool - Connection pool usage at 97/100
+2026-06-25 09:16:01,553 ERROR [order-service] OrderProcessor - Failed to process order 8841
+java.sql.SQLException: Connection pool exhausted, timeout waiting for connection (30000ms)
+    at com.app.db.Pool.get(Pool.java:88)
+    at com.app.order.OrderProcessor.process(OrderProcessor.java:142)
+    at com.app.order.OrderProcessor.handleRequest(OrderProcessor.java:75)
+2026-06-25 09:16:05,772 ERROR [order-service] OrderProcessor - Failed to process order 8842
+java.sql.SQLException: Connection pool exhausted, timeout waiting for connection (30000ms)
+    at com.app.db.Pool.get(Pool.java:88)
+    at com.app.order.OrderProcessor.process(OrderProcessor.java:142)
+2026-06-25 09:16:09,910 ERROR [order-service] OrderProcessor - Failed to process order 8843
+java.sql.SQLException: Connection pool exhausted, timeout waiting for connection (30000ms)
+    at com.app.db.Pool.get(Pool.java:88)
+2026-06-25 09:16:15,003 WARN [inventory-service] InventoryWorker - Slow response from order-service dependency, latency 4800ms
+2026-06-25 09:16:20,118 ERROR [inventory-service] InventoryWorker - Timeout calling order-service /reserve endpoint
+java.util.concurrent.TimeoutException: Request to order-service timed out after 5000ms
+    at com.app.http.Client.call(Client.java:201)
+    at com.app.inventory.InventoryWorker.reserveStock(InventoryWorker.java:64)
+2026-06-25 09:16:25,442 ERROR [payment-service] PaymentGateway - Order validation failed: order-service returned 503
+com.app.payment.UpstreamException: order-service unavailable (HTTP 503)
+    at com.app.payment.PaymentGateway.validateOrder(PaymentGateway.java:99)
+2026-06-25 09:16:31,007 ERROR [order-service] OrderProcessor - Failed to process order 8844
+java.sql.SQLException: Connection pool exhausted, timeout waiting for connection (30000ms)
+    at com.app.db.Pool.get(Pool.java:88)
+2026-06-25 09:16:40,221 ERROR [order-service] OrderProcessor - Failed to process order 8845
+java.sql.SQLException: Connection pool exhausted, timeout waiting for connection (30000ms)
+    at com.app.db.Pool.get(Pool.java:88)
+2026-06-25 09:16:48,330 ERROR [inventory-service] InventoryWorker - Timeout calling order-service /reserve endpoint
+java.util.concurrent.TimeoutException: Request to order-service timed out after 5000ms
+    at com.app.http.Client.call(Client.java:201)
+2026-06-25 09:17:02,554 ERROR [payment-service] PaymentGateway - Order validation failed: order-service returned 503
+com.app.payment.UpstreamException: order-service unavailable (HTTP 503)
+    at com.app.payment.PaymentGateway.validateOrder(PaymentGateway.java:99)
+2026-06-25 09:17:10,665 ERROR [order-service] OrderProcessor - Failed to process order 8846
+java.sql.SQLException: Connection pool exhausted, timeout waiting for connection (30000ms)
+    at com.app.db.Pool.get(Pool.java:88)
+2026-06-25 09:17:20,772 ERROR [order-service] OrderProcessor - Failed to process order 8847
+java.sql.SQLException: Connection pool exhausted, timeout waiting for connection (30000ms)
+    at com.app.db.Pool.get(Pool.java:88)
+2026-06-25 09:17:35,001 WARN [order-service] HealthCheck - /health endpoint responding slowly (avg 6200ms)
+2026-06-25 09:18:02,118 ERROR [inventory-service] InventoryWorker - Timeout calling order-service /reserve endpoint
+java.util.concurrent.TimeoutException: Request to order-service timed out after 5000ms
+    at com.app.http.Client.call(Client.java:201)
+2026-06-25 09:18:15,229 ERROR [payment-service] PaymentGateway - Order validation failed: order-service returned 503
+com.app.payment.UpstreamException: order-service unavailable (HTTP 503)
+    at com.app.payment.PaymentGateway.validateOrder(PaymentGateway.java:99)
+2026-06-25 09:18:40,556 FATAL [order-service] OrderProcessor - Circuit breaker OPEN for db-pool, rejecting all new requests
+com.app.db.CircuitBreakerOpenException: db-pool circuit breaker is open
+    at com.app.db.Pool.get(Pool.java:80)
+2026-06-25 09:19:01,002 ERROR [order-service] OrderProcessor - Failed to process order 8848
+com.app.db.CircuitBreakerOpenException: db-pool circuit breaker is open
+    at com.app.db.Pool.get(Pool.java:80)
+2026-06-25 09:19:30,118 ERROR [order-service] OrderProcessor - Failed to process order 8849
+com.app.db.CircuitBreakerOpenException: db-pool circuit breaker is open
+    at com.app.db.Pool.get(Pool.java:80)
+2026-06-25 09:20:02,330 INFO [oncall-bot] AlertManager - PagerDuty alert triggered: "order-service error rate > 30% for 3 minutes"
