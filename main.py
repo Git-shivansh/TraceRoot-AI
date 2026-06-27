@@ -10,7 +10,7 @@ import argparse
 import json
 import sys
 
-from agent import run_rca_agent
+import config
 from log_parser import parse_log_file
 from report_generator import generate_markdown_report
 
@@ -21,6 +21,12 @@ def main():
     parser.add_argument("--output", default="rca_report.md", help="Path to write the Markdown report")
     parser.add_argument("--json", default=None, help="Optional path to also write the raw JSON verdict")
     parser.add_argument("--quiet", action="store_true", help="Suppress per-tool-call progress output")
+    parser.add_argument(
+        "--provider",
+        choices=["anthropic", "openai"],
+        default=config.DEFAULT_PROVIDER,
+        help="Which LLM provider to use (default: %(default)s)",
+    )
     args = parser.parse_args()
 
     print(f"Parsing log file: {args.log}")
@@ -30,8 +36,13 @@ def main():
         sys.exit(1)
     print(f"Parsed {len(entries)} log entries.")
 
-    print("Running agentic root cause analysis (this may take a few tool-use turns)...")
-    verdict = run_rca_agent(entries, verbose=not args.quiet)
+    print(f"Running agentic root cause analysis using {args.provider} (this may take a few tool-use turns)...")
+    if args.provider == "openai":
+        from agent_openai import run_rca_agent_openai
+        verdict = run_rca_agent_openai(entries, verbose=not args.quiet)
+    else:
+        from agent import run_rca_agent
+        verdict = run_rca_agent(entries, verbose=not args.quiet)
 
     report_md = generate_markdown_report(verdict, args.log)
     with open(args.output, "w") as f:
