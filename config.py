@@ -16,7 +16,7 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 OPENAI_MODEL = "gpt-4o"
 
 # Which provider to use if --provider isn't passed on the command line
-DEFAULT_PROVIDER = "anthropic"  # or "openai"
+DEFAULT_PROVIDER = "openai"  # or "openai"
 
 # Safety cap on how many tool-use "investigation turns" the agent can take
 # before it is forced to give a final answer.
